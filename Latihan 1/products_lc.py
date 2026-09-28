@@ -1,0 +1,31 @@
+import json
+import csv
+from typing import List, Dict, Any
+
+#1. READ: Membaca langsung dari file JSON
+input_file_json: str = "data/raw_products.json"
+with open(input_file_json, mode="r", encoding="utf-8") as file:
+    payload: Dict[str, Any] = json.load(file)
+raw_items: List[Dict[str, Any]] = payload.get("products")
+items: List[Dict[str, Any]] = raw_items if isinstance(raw_items, list) else []
+
+#2. TRANSFORM: Transformasi Data Menggunakan List Comprehension
+available_products: List[Dict[str, Any]] = [
+    {
+        "item_code": item["item_code"],
+        "product_name": item["name"].upper(),
+        "price": float(item["price"]),
+        "stock_category": "High Stock" if float(item["stock"]) >= 20 else "Low Stock"
+    }
+    for item in items
+    if item["is_available"] is True
+]
+
+#3. WRITE: Menyimpan ke file CSV
+output_path: str = "data/products_lc.csv"
+headers: List[str] = ["item_code", "product_name", "price", "stock_category"]
+with open(output_path, mode="w", encoding="utf-8", newline="") as file:
+    writer: csv.DictWriter = csv.DictWriter(file, fieldnames=headers)
+    writer.writeheader()
+    writer.writerows(available_products)
+print(f"[SUCCESS] Data berhasil disimpan di: {output_path}")
