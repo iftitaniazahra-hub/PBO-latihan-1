@@ -1,4 +1,4 @@
-# PBO Latihan 1 - Object Oriented Programming
+# Latihan 1 - Object Oriented Programming
 
 Repositori ini dibuat untuk memenuhi tugas Mata Kuliah **Object Oriented Programming**.
 
